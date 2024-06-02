@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import sunIcon from "./assets/images/icon-sun.svg";
+import moonIcon from "./assets/images/icon-moon.svg";
 import {
   addTodo,
   completeTodo,
@@ -23,10 +24,15 @@ function App() {
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
   const [text, setText] = useState<string>("");
   const [activeButton, setActiveButton] = useState<string>("all");
+  const [theme, setTheme] = useState<string>("dark");
 
   useEffect(() => {
     setTodos(initialTodos);
   }, [initialTodos]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
 
   const handleFilter = (action: string): void => {
     let filteredTodos;
@@ -68,14 +74,18 @@ function App() {
     dispatch(completeTodo(taskId));
   };
 
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
+  };
+
   return (
-    <div className="content-container">
-      <header className="header dark"></header>
+    <div className={`content-container ${theme === "dark" ? "dark" : "light"}`}>
+      <header className="header"></header>
       <section className="content">
         <div className="title-container">
           <h1 className="title">TODO</h1>
-          <button className="btn-toggle">
-            <img src={sunIcon} alt="" />
+          <button className="btn-toggle" onClick={toggleTheme}>
+            <img src={theme === "dark" ? sunIcon : moonIcon} alt="theme icon" />
           </button>
         </div>
         <div className="input-container">
